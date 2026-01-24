@@ -1,0 +1,168 @@
+{
+  "categories": ["Gaming", "Tech", "Health", "Nutrition", "Fashion", "Finance"],
+  "influencers": [
+    "MrBeast",
+    "PewDiePie",
+    "FireShip.io",
+    "Cold Blooded Shiller",
+    "Taylor Swift",
+    "Snoop Dogg"
+  ],
+  "offers": [
+    {
+      "title": "Dragon Realm RPG",
+      "description": "Fantasy mobile RPG with PvP and daily quests",
+      "categories": ["Gaming"],
+      "payout": {
+        "type": "cpa",
+        "cpa_amount": 20,
+        "fixed_amount": 0,
+        "country_overrides": [
+          { "country_code": "JP", "cpa_amount": 35 },
+          { "country_code": "KR", "cpa_amount": 32 },
+          { "country_code": "CN", "cpa_amount": 28 }
+        ]
+      }
+    },
+    {
+      "title": "AI Resume Builder Pro",
+      "description": "AI-powered resume and cover letter generator",
+      "categories": ["Tech", "Finance"],
+      "payout": {
+        "type": "fixed",
+        "cpa_amount": 0,
+        "fixed_amount": 50,
+        "country_overrides": []
+      }
+    },
+    {
+      "title": "FitLife Nutrition Plan",
+      "description": "Personalized meal plans and fitness tracking",
+      "categories": ["Health", "Nutrition"],
+      "payout": {
+        "type": "cpa",
+        "cpa_amount": 15,
+        "fixed_amount": 0,
+        "country_overrides": [
+          { "country_code": "DE", "cpa_amount": 30 },
+          { "country_code": "US", "cpa_amount": 25 },
+          { "country_code": "GB", "cpa_amount": 22 },
+          { "country_code": "FR", "cpa_amount": 20 }
+        ]
+      }
+    },
+    {
+      "title": "UrbanStyle Fashion Store",
+      "description": "Online fashion store with modern streetwear",
+      "categories": ["Fashion"],
+      "payout": {
+        "type": "cpa_fixed",
+        "cpa_amount": 10,
+        "fixed_amount": 40,
+        "country_overrides": [
+          { "country_code": "US", "cpa_amount": 18 },
+          { "country_code": "CA", "cpa_amount": 16 }
+        ]
+      }
+    },
+    {
+      "title": "Smart Budget Tracker",
+      "description": "Expense tracking and budgeting mobile app",
+      "categories": ["Finance", "Tech"],
+      "payout": {
+        "type": "fixed",
+        "cpa_amount": 0,
+        "fixed_amount": 35,
+        "country_overrides": []
+      }
+    },
+    {
+      "title": "BlockMint Exchange New User Bonus",
+      "description": "Sign up, pass verification, and make first crypto deposit",
+      "categories": ["Finance"],
+      "payout": {
+        "type": "cpa_fixed",
+        "cpa_amount": 20,
+        "fixed_amount": 50,
+        "country_overrides": [
+          { "country_code": "GB", "cpa_amount": 25 },
+          { "country_code": "FR", "cpa_amount": 22 }
+        ]
+      }
+    }
+  ],
+  "custom_payouts": [
+    {
+      "offer_title": "Dragon Realm RPG",
+      "influencer_name": "MrBeast",
+      "type": "cpa",
+      "cpa_amount": 50,
+      "fixed_amount": 0,
+      "country_overrides": [
+        { "country_code": "US", "cpa_amount": 75 },
+        { "country_code": "JP", "cpa_amount": 60 }
+      ]
+    },
+    {
+      "offer_title": "Dragon Realm RPG",
+      "influencer_name": "PewDiePie",
+      "type": "cpa",
+      "cpa_amount": 35,
+      "fixed_amount": 0,
+      "country_overrides": [
+        { "country_code": "JP", "cpa_amount": 45 },
+        { "country_code": "SE", "cpa_amount": 40 }
+      ]
+    },
+    {
+      "offer_title": "AI Resume Builder Pro",
+      "influencer_name": "FireShip.io",
+      "type": "cpa_fixed",
+      "cpa_amount": 30,
+      "fixed_amount": 100,
+      "country_overrides": [{ "country_code": "US", "cpa_amount": 45 }]
+    },
+    {
+      "offer_title": "BlockMint Exchange New User Bonus",
+      "influencer_name": "Cold Blooded Shiller",
+      "type": "cpa_fixed",
+      "cpa_amount": 40,
+      "fixed_amount": 100,
+      "country_overrides": [
+        { "country_code": "US", "cpa_amount": 60 },
+        { "country_code": "GB", "cpa_amount": 50 },
+        { "country_code": "SG", "cpa_amount": 55 }
+      ]
+    },
+    {
+      "offer_title": "UrbanStyle Fashion Store",
+      "influencer_name": "Taylor Swift",
+      "type": "cpa_fixed",
+      "cpa_amount": 25,
+      "fixed_amount": 200,
+      "country_overrides": [
+        { "country_code": "US", "cpa_amount": 40 },
+        { "country_code": "GB", "cpa_amount": 35 }
+      ]
+    },
+    {
+      "offer_title": "FitLife Nutrition Plan",
+      "influencer_name": "Snoop Dogg",
+      "type": "cpa",
+      "cpa_amount": 30,
+      "fixed_amount": 0,
+      "country_overrides": [
+        { "country_code": "US", "cpa_amount": 45 },
+        { "country_code": "CA", "cpa_amount": 40 }
+      ]
+    },
+    {
+      "offer_title": "Smart Budget Tracker",
+      "influencer_name": "MrBeast",
+      "type": "fixed",
+      "cpa_amount": 0,
+      "fixed_amount": 150,
+      "country_overrides": []
+    }
+  ]
+}
