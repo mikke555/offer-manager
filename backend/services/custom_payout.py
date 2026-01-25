@@ -1,17 +1,18 @@
-from sqlalchemy.orm import selectinload
-
 from api.schemas.payout import CustomPayoutCreate, CustomPayoutResp
 from core.exceptions import (
     CustomPayoutAlreadyExistsException,
     InfluencerNotFoundException,
 )
 from database.models import CustomCountryOverride, CustomPayout, Influencer
+from sqlalchemy.orm import selectinload
+
 from services.base import BaseService
 
 
 class CustomPayoutService(BaseService):
     model = CustomPayout
     schema = CustomPayoutResp
+    name = "Custom Payout"
 
     def _append_custom_payout(
         self, offer_id: int, influencer_id: int, payout: CustomPayoutCreate
@@ -49,7 +50,7 @@ class CustomPayoutService(BaseService):
         self, offer_id: int, influencer_id: int, payout: CustomPayoutCreate
     ) -> CustomPayoutResp:
         if not self.session.get(Influencer, influencer_id):
-            raise InfluencerNotFoundException()
+            raise InfluencerNotFoundException(id=influencer_id)
 
         if self.exists(offer_id=offer_id, influencer_id=influencer_id):
             raise CustomPayoutAlreadyExistsException(offer_id, influencer_id)
@@ -63,7 +64,7 @@ class CustomPayoutService(BaseService):
     def update(
         self, offer_id: int, influencer_id: int, payout: CustomPayoutCreate
     ) -> CustomPayoutResp:
-        db_custom_payout = self.get_by(offer_id=offer_id, influencer_id=influencer_id)
+        db_custom_payout = self._get_by(offer_id=offer_id, influencer_id=influencer_id)
 
         self.session.delete(db_custom_payout)
         self.session.flush()

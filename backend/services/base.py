@@ -1,33 +1,37 @@
+from core.exceptions import NotFoundException
 from fastapi import Response, status
 from pydantic import BaseModel
-from sqlmodel import Session, select
-
-from core.exceptions import NotFoundException
+from sqlmodel import Session, SQLModel, select
 
 
 class BaseService:
-    model = None
+    model: SQLModel = None
     schema: BaseModel = None
+    name: str = None
 
     def __init__(self, session: Session):
         self.session = session
 
-    def _get(self, id: int):
+    def _get(self, id: int) -> SQLModel:
         db_item = self.session.get(self.model, id)
         if not db_item:
-            raise NotFoundException
+            raise NotFoundException(id=id, name=self.name)
         return db_item
 
     def get(self, id: int) -> BaseModel:
         db_item = self._get(id)
         return self.schema.model_validate(db_item)
 
-    def get_by(self, **filter_by):
+    def _get_by(self, **filter_by) -> SQLModel:
         statement = select(self.model).filter_by(**filter_by)
         db_item = self.session.exec(statement).first()
         if not db_item:
-            raise NotFoundException
+            raise NotFoundException(id=id, name=self.name)
         return db_item
+
+    def get_by(self, **filter_by) -> BaseModel:
+        db_item = self._get_by(**filter_by)
+        return self.schema.model_validate(db_item)
 
     def exists(self, **filter_by) -> bool:
         statement = select(self.model).filter_by(**filter_by)
@@ -47,7 +51,7 @@ class BaseService:
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     def delete_by(self, **filter_by) -> Response:
-        db_item = self.get_by(**filter_by)
+        db_item = self._get_by(**filter_by)
         self.session.delete(db_item)
         self.session.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)

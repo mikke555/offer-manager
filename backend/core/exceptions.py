@@ -2,27 +2,26 @@ from fastapi import HTTPException, status
 
 
 class NotFoundException(HTTPException):
-    noun = "Resource"
+    def __init__(self, id: int | None = None, name: str | None = "Resource"):
+        self.id = id
+        self.name = name
 
-    def __init__(self, id: int | None = None):
         detail = (
-            f"{self.noun} with id {id} not found"
+            f"{self.name} with id {self.id} not found"
             if id is not None
-            else f"{self.noun} not found"
+            else f"{self.name} not found"
         )
         super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=detail)
 
 
 class OfferNotFoundException(NotFoundException):
-    noun = "Offer"
+    def __init__(self, id: int | None = None):
+        super().__init__(id=id, name="Offer")
 
 
 class InfluencerNotFoundException(NotFoundException):
-    noun = "Influencer"
-
-
-class CustomPayoutNotFoundException(NotFoundException):
-    noun = "Custom payout"
+    def __init__(self, id: int | None = None):
+        super().__init__(id=id, name="Influencer")
 
 
 class InvalidCategoryException(HTTPException):

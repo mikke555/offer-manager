@@ -1,6 +1,3 @@
-from sqlalchemy.orm import selectinload
-from sqlmodel import Session, select
-
 from api.schemas.offer import OfferCreate, OfferResp, OfferUpdate
 from api.schemas.payout import PayoutCreate, PayoutResp
 from core.exceptions import InfluencerNotFoundException, InvalidCategoryException
@@ -12,12 +9,16 @@ from database.models import (
     Offer,
     Payout,
 )
+from sqlalchemy.orm import selectinload
+from sqlmodel import Session, select
+
 from services.base import BaseService
 
 
 class OfferService(BaseService):
     model = Offer
     schema = OfferResp
+    name = "Offer"
 
     def __init__(self, session: Session):
         self.session = session
@@ -56,7 +57,7 @@ class OfferService(BaseService):
         if influencer_id is not None and not self.session.get(
             Influencer, influencer_id
         ):
-            raise InfluencerNotFoundException()
+            raise InfluencerNotFoundException(id=influencer_id)
 
         statement = (
             select(Offer)

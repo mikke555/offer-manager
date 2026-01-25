@@ -1,13 +1,12 @@
 from typing import Annotated
 
-from fastapi import Depends
-from sqlmodel import Session
-
 from core.exceptions import OfferNotFoundException
 from database.database import engine
 from database.models import Offer
+from fastapi import Depends
 from services.custom_payout import CustomPayoutService
 from services.offer import OfferService
+from sqlmodel import Session
 
 
 def get_session():
@@ -21,7 +20,7 @@ SessionDep = Annotated[Session, Depends(get_session)]
 def get_offer(offer_id: int, session: SessionDep) -> Offer:
     offer = session.get(Offer, offer_id)
     if not offer:
-        raise OfferNotFoundException(offer_id)
+        raise OfferNotFoundException(id=offer_id)
     return offer
 
 
@@ -39,4 +38,6 @@ def get_custom_payout_service(session: SessionDep) -> CustomPayoutService:
     return CustomPayoutService(session)
 
 
-CustomPayoutServiceDep = Annotated[CustomPayoutService, Depends(get_custom_payout_service)]
+CustomPayoutServiceDep = Annotated[
+    CustomPayoutService, Depends(get_custom_payout_service)
+]
