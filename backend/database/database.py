@@ -1,8 +1,8 @@
 from sqlmodel import SQLModel, create_engine
 
-DB_URL = "sqlite:///local.db"
+from config import settings
 
-engine = create_engine(DB_URL)
+engine = create_engine(settings.DB_URL)
 
 
 def init_db():
