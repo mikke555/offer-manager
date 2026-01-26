@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.routing import APIRoute
 from tests.utils import insert_dummy_data
+from config import settings
 
 
 def generate_unique_id(route: APIRoute) -> str:
@@ -35,7 +36,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[settings.CORS_ORIGINS],
     allow_methods=["*"],
     allow_headers=["*"],
 )

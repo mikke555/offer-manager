@@ -4,8 +4,10 @@ import type { OfferResp } from "./client";
 import Navbar from "./components/Navbar";
 import OffersList from "./components/OffersList";
 
-const api = new Api({ baseUrl: "http://localhost:8000" });
-const INFLUENCER_ID = 1;
+const api = new Api({
+  baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000",
+});
+const INFLUENCER_ID = Number(import.meta.env.VITE_INFLUENCER_ID) || 1;
 
 function App() {
   const [data, setData] = useState<OfferResp[] | null>([]);
