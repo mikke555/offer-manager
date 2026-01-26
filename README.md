@@ -2,6 +2,8 @@
 
 Full-stack application for managing affiliate marketing offers with custom payout configurations for individual influencers.
 
+**Live Demo:** https://offer-manager-frontend.onrender.com/
+
 ## Tech Stack
 
 **Backend**
