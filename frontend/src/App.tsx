@@ -7,7 +7,12 @@ import OffersList from "./components/OffersList";
 const api = new Api({
   baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000",
 });
-const INFLUENCER_ID = Number(import.meta.env.VITE_INFLUENCER_ID) || 1;
+
+function parseUrl(): number | null {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("influencer_id");
+  return id ? Number(id) : null;
+}
 
 function App() {
   const [data, setData] = useState<OfferResp[] | null>([]);
@@ -15,16 +20,20 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [influencerId] = useState<number | null>(parseUrl);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [offersResp, influencerResp] = await Promise.all([
-          api.api.getOffers({ influencer_id: INFLUENCER_ID }),
-          api.api.getInfluencer(INFLUENCER_ID),
-        ]);
+        const offersResp = await api.api.getOffers(
+          influencerId ? { influencer_id: influencerId } : {},
+        );
         setData(offersResp.data);
-        setInfluencerName(influencerResp.data.name);
+
+        if (influencerId) {
+          const influencerResp = await api.api.getInfluencer(influencerId);
+          setInfluencerName(influencerResp.data.name);
+        }
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -32,7 +41,7 @@ function App() {
       }
     }
     fetchData();
-  }, []);
+  }, [influencerId]);
 
   const offers = data?.filter((offer) =>
     offer.title.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -41,8 +50,8 @@ function App() {
   const renderContent = () => {
     if (error) {
       const msg =
-        (error as any).status === 404
-          ? `Influencer with ID ${INFLUENCER_ID} not found.`
+        (error as any).status === 404 && influencerId
+          ? `Influencer with ID ${influencerId} not found.`
           : "Error loading offers.";
       return <p className="text-slate-600 text-lg">{msg}</p>;
     }
