@@ -1,7 +1,9 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Body
 
 from api.deps import CustomPayoutServiceDep, OfferDep
 from api.schemas.payout import CustomPayoutCreate, CustomPayoutResp
+from api.const import custom_payout_put_examples
+
 
 router = APIRouter(prefix="/offers", tags=["Custom Payouts"])
 
@@ -38,9 +40,10 @@ def get_custom_payout(
     "/{offer_id}/custom-payouts/{influencer_id}", response_model=CustomPayoutResp
 )
 def update_custom_payout(
+    *,
     offer: OfferDep,
     influencer_id: int,
-    payout: CustomPayoutCreate,
+    payout: CustomPayoutCreate = Body(openapi_examples=custom_payout_put_examples),
     custom_payout_service: CustomPayoutServiceDep,
 ):
     return custom_payout_service.update(offer.id, influencer_id, payout)

@@ -153,12 +153,10 @@ custom_payout_put_examples = {
     "example1": {
         "summary": "Change custom payout to CPA + Fixed with country overrides",
         "value": {
-            "payout": {
-                "type": "cpa_fixed",
-                "cpa_amount": 10,
-                "fixed_amount": 100,
-                "country_overrides": [{"country_code": "DE", "cpa_amount": 30.00}],
-            }
+            "type": "cpa_fixed",
+            "cpa_amount": 10,
+            "fixed_amount": 100,
+            "country_overrides": [{"country_code": "DE", "cpa_amount": 30}],
         },
     },
 }
