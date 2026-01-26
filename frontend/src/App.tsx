@@ -39,8 +39,13 @@ function App() {
   );
 
   const renderContent = () => {
-    if (error)
-      return <p className="text-slate-600 text-lg">Error loading offers.</p>;
+    if (error) {
+      const msg =
+        (error as any).status === 404
+          ? `Influencer with ID ${INFLUENCER_ID} not found.`
+          : "Error loading offers.";
+      return <p className="text-slate-600 text-lg">{msg}</p>;
+    }
     if (loading)
       return <p className="text-slate-600 text-lg">Loading offers...</p>;
     if (offers?.length) return <OffersList offers={offers} />;
@@ -53,6 +58,7 @@ function App() {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         username={influencerName}
+        loading={loading}
       />
       <main className="container mx-auto p-4 flex flex-col justify-center items-center">
         {renderContent()}

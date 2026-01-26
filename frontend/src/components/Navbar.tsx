@@ -1,18 +1,29 @@
+import { motion } from "motion/react";
 import Search from "./Search";
 
 interface NavbarProps {
   searchTerm: string;
   setSearchTerm: (value: string) => void;
   username: string;
+  loading?: boolean;
 }
 
-const Navbar = ({ searchTerm, setSearchTerm, username }: NavbarProps) => {
+const Navbar = ({
+  searchTerm,
+  setSearchTerm,
+  username,
+  loading,
+}: NavbarProps) => {
   return (
     <nav className="bg-violet-600 text-white py-4 shadow-md mb-16">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
         <a href="#" className="justify-self-center md:justify-self-start">
           <h1 className="text-3xl font-medium font-logo">
-            Welcome {username}!
+            {!loading && (
+              <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                {`Welcome ${username || "Guest"}!`}
+              </motion.span>
+            )}
           </h1>
         </a>
         <div className="flex justify-center">
