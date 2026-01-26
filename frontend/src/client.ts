@@ -698,15 +698,29 @@ export class Api<
      * No description
      *
      * @tags Influencers
-     * @name GetCategories2
-     * @summary Get Categories
+     * @name GetInfluencers
+     * @summary Get Influencers
      * @request GET:/api/influencers/
-     * @originalName getCategories
-     * @duplicate
      */
-    getCategories2: (params: RequestParams = {}) =>
+    getInfluencers: (params: RequestParams = {}) =>
       this.request<InfluencerResp[], any>({
         path: `/api/influencers/`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Influencers
+     * @name GetInfluencer
+     * @summary Get Influencer
+     * @request GET:/api/influencers/{influencer_id}
+     */
+    getInfluencer: (influencerId: number, params: RequestParams = {}) =>
+      this.request<InfluencerResp, HTTPValidationError>({
+        path: `/api/influencers/${influencerId}`,
         method: "GET",
         format: "json",
         ...params,

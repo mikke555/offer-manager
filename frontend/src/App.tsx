@@ -4,10 +4,12 @@ import type { OfferResp } from "./client";
 import Navbar from "./components/Navbar";
 import OffersList from "./components/OffersList";
 
-const api = new Api({ baseUrl: "http://127.0.0.1:8000" });
+const api = new Api({ baseUrl: "http://localhost:8000" });
+const INFLUENCER_ID = 1;
 
 function App() {
   const [data, setData] = useState<OfferResp[] | null>([]);
+  const [influencerName, setInfluencerName] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,8 +17,12 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const resp = await api.api.getOffers();
-        setData(resp.data);
+        const [offersResp, influencerResp] = await Promise.all([
+          api.api.getOffers({ influencer_id: INFLUENCER_ID }),
+          api.api.getInfluencer(INFLUENCER_ID),
+        ]);
+        setData(offersResp.data);
+        setInfluencerName(influencerResp.data.name);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -41,7 +47,11 @@ function App() {
 
   return (
     <div className="bg-slate-50 min-h-screen">
-      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Navbar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        username={influencerName}
+      />
       <main className="container mx-auto p-4 flex flex-col justify-center items-center">
         {renderContent()}
       </main>
