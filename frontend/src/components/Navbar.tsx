@@ -15,8 +15,8 @@ const Navbar = ({
   loading,
 }: NavbarProps) => {
   return (
-    <nav className="bg-violet-600 text-white py-4 shadow-md mb-16">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+    <nav className="bg-violet-600 text-white shadow-md mb-6 md:mb-16 pt-4 pb-8 md:pb-6">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         <a href="#" className="justify-self-center md:justify-self-start">
           <h1 className="text-3xl font-medium font-logo">
             {!loading && (
