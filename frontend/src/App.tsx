@@ -69,9 +69,7 @@ function App() {
         username={influencerName}
         loading={loading}
       />
-      <main className="container mx-auto p-4 flex flex-col justify-center items-center">
-        {renderContent()}
-      </main>
+      <main className="container mx-auto p-4">{renderContent()}</main>
     </div>
   );
 }
