@@ -18,7 +18,7 @@ function App() {
   const [data, setData] = useState<OfferResp[] | null>([]);
   const [influencerName, setInfluencerName] = useState<string>("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<unknown>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [influencerId] = useState<number | null>(parseUrl);
 
@@ -50,7 +50,7 @@ function App() {
   const renderContent = () => {
     if (error) {
       const msg =
-        (error as any).status === 404 && influencerId
+        error instanceof Response && error.status === 404 && influencerId
           ? `Influencer with ID ${influencerId} not found.`
           : "Error loading offers.";
       return <p className="text-slate-600 text-lg">{msg}</p>;
