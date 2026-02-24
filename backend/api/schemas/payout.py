@@ -43,6 +43,7 @@ class PayoutBase(BaseModel):
 
 
 class PayoutCreate(PayoutBase):
+    influencer_id: int | None = None
     country_overrides: list[CountryOverrideCreate] = []
 
     @model_validator(mode="after")
@@ -54,24 +55,7 @@ class PayoutCreate(PayoutBase):
 
 class PayoutResp(PayoutBase):
     id: int
-    country_overrides: list[CountryOverrideResp] = []
-
-    model_config = ConfigDict(from_attributes=True)
-
-
-class CustomPayoutCreate(PayoutBase):
-    country_overrides: list[CountryOverrideCreate] = []
-
-    @model_validator(mode="after")
-    def validate_country_overrides(self):
-        if self.type == PayoutType.FIXED and self.country_overrides:
-            raise ValueError("country_overrides not allowed for FIXED payout type")
-        return self
-
-
-class CustomPayoutResp(PayoutBase):
-    id: int
-    influencer_id: int
+    influencer_id: int | None = None
     country_overrides: list[CountryOverrideResp] = []
 
     model_config = ConfigDict(from_attributes=True)

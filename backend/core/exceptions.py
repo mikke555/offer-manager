@@ -24,16 +24,17 @@ class InfluencerNotFoundException(NotFoundException):
         super().__init__(id=id, name="Influencer")
 
 
+class PayoutAlreadyExistsException(HTTPException):
+    def __init__(self, offer_id: int, influencer_id: int | None):
+        target = f"influencer {influencer_id}" if influencer_id else "default"
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Payout for offer {offer_id} ({target}) already exists",
+        )
+
+
 class InvalidCategoryException(HTTPException):
     def __init__(self, detail: str = "This category is not allowed"):
         super().__init__(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=detail
-        )
-
-
-class CustomPayoutAlreadyExistsException(HTTPException):
-    def __init__(self, offer_id: int, influencer_id: int):
-        super().__init__(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"Custom payout for offer {offer_id} and influencer {influencer_id} already exists",
         )

@@ -7,8 +7,6 @@ from database.database import engine
 from database.models import (
     Category,
     CountryOverride,
-    CustomCountryOverride,
-    CustomPayout,
     Influencer,
     Offer,
     Payout,
@@ -22,8 +20,7 @@ def insert_dummy_data() -> None:
 
         insert_categories(session, data["categories"])
         insert_influencers(session, data["influencers"])
-        insert_offers(session, data["offers"])
-        insert_custom_payouts(session, data["custom_payouts"])
+        insert_offers(session, data)
 
         session.commit()
 
@@ -46,67 +43,51 @@ def insert_influencers(session: Session, data: list[str]) -> None:
     session.flush()
 
 
-def insert_offers(session: Session, data: list[dict[str, Any]]) -> None:
+def insert_offers(session: Session, data: dict[str, Any]) -> None:
     records_exist = session.exec(select(Offer)).first()
     if records_exist:
         return
 
     categories = {c.name: c for c in session.exec(select(Category)).all()}
-    offers: list[Offer] = []
+    influencers = {i.name: i for i in session.exec(select(Influencer)).all()}
+    offers_by_title: dict[str, Offer] = {}
 
-    for item in data:
-        payout_data = item["payout"]
-        country_overrides = [
-            CountryOverride(**override)
-            for override in payout_data.get("country_overrides", [])
-        ]
-
-        payout = Payout(
-            type=payout_data["type"],
-            cpa_amount=payout_data.get("cpa_amount"),
-            fixed_amount=payout_data.get("fixed_amount"),
-            country_overrides=country_overrides,
-        )
-
+    for item in data["offers"]:
+        payout = _build_payout(item["payout"])
         offer_categories = [categories[name] for name in item["categories"]]
 
         offer = Offer(
             title=item["title"],
             description=item["description"],
-            payout=payout,
+            payouts=[payout],
             categories=offer_categories,
         )
-        offers.append(offer)
+        offers_by_title[offer.title] = offer
 
-    session.add_all(offers)
+    session.add_all(offers_by_title.values())
+    session.flush()
+
+    for item in data.get("custom_payouts", []):
+        offer = offers_by_title[item["offer_title"]]
+        influencer = influencers[item["influencer_name"]]
+        payout = _build_payout(item, influencer_id=influencer.id)
+        payout.offer_id = offer.id
+        session.add(payout)
+
     session.flush()
 
 
-def insert_custom_payouts(session: Session, data: list[dict[str, Any]]) -> None:
-    records_exist = session.exec(select(CustomPayout)).first()
-    if records_exist:
-        return
-
-    influencers = {i.name: i for i in session.exec(select(Influencer)).all()}
-    offers_dict = {o.title: o for o in session.exec(select(Offer)).all()}
-
-    custom_payouts: list[CustomPayout] = []
-
-    for item in data:
-        country_overrides = [
-            CustomCountryOverride(**override)
-            for override in item.get("country_overrides", [])
-        ]
-
-        custom_payout = CustomPayout(
-            offer_id=offers_dict[item["offer_title"]].id,
-            influencer_id=influencers[item["influencer_name"]].id,
-            type=item["type"],
-            cpa_amount=item.get("cpa_amount"),
-            fixed_amount=item.get("fixed_amount"),
-            country_overrides=country_overrides,
-        )
-        custom_payouts.append(custom_payout)
-
-    session.add_all(custom_payouts)
-    session.flush()
+def _build_payout(
+    data: dict[str, Any], influencer_id: int | None = None
+) -> Payout:
+    country_overrides = [
+        CountryOverride(**override)
+        for override in data.get("country_overrides", [])
+    ]
+    return Payout(
+        type=data["type"],
+        cpa_amount=data.get("cpa_amount"),
+        fixed_amount=data.get("fixed_amount"),
+        influencer_id=influencer_id,
+        country_overrides=country_overrides,
+    )

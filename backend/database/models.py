@@ -1,4 +1,4 @@
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, Relationship, SQLModel, UniqueConstraint
 
 from core.enums import PayoutType
 
@@ -7,7 +7,7 @@ class Influencer(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str
 
-    custom_payouts: list["CustomPayout"] = Relationship(
+    payouts: list["Payout"] = Relationship(
         back_populates="influencer", cascade_delete=True
     )
 
@@ -28,13 +28,20 @@ class Category(SQLModel, table=True):
 
 
 class Payout(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint("offer_id", "influencer_id"),)
+
     id: int = Field(default=None, primary_key=True)
     type: PayoutType
     cpa_amount: int | None = None
     fixed_amount: int | None = None
 
-    offer_id: int = Field(foreign_key="offer.id", unique=True)
-    offer: "Offer" = Relationship(back_populates="payout")
+    offer_id: int = Field(foreign_key="offer.id", ondelete="CASCADE")
+    offer: "Offer" = Relationship(back_populates="payouts")
+
+    influencer_id: int | None = Field(
+        default=None, foreign_key="influencer.id", ondelete="CASCADE"
+    )
+    influencer: Influencer | None = Relationship(back_populates="payouts")
 
     country_overrides: list["CountryOverride"] = Relationship(
         back_populates="payout", cascade_delete=True
@@ -55,12 +62,9 @@ class Offer(SQLModel, table=True):
     title: str = Field(max_length=50)
     description: str = Field(max_length=100)
 
-    payout: "Payout" = Relationship(
+    payouts: list["Payout"] = Relationship(
         back_populates="offer",
-        sa_relationship_kwargs={
-            "uselist": False,  # one-to-one rel
-            "cascade": "all,delete,delete-orphan",
-        },
+        cascade_delete=True,
     )
 
     categories: list[Category] = Relationship(
@@ -68,30 +72,6 @@ class Offer(SQLModel, table=True):
         link_model=OfferCategoryLink,
     )
 
-    custom_payouts: list["CustomPayout"] = Relationship(
-        back_populates="offer", cascade_delete=True
-    )
-
-
-class CustomCountryOverride(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    custom_payout_id: int = Field(foreign_key="custompayout.id", ondelete="CASCADE")
-    country_code: str = Field(max_length=2)
-    cpa_amount: int
-
-    custom_payout: "CustomPayout" = Relationship(back_populates="country_overrides")
-
-
-class CustomPayout(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    offer_id: int = Field(foreign_key="offer.id", ondelete="CASCADE")
-    influencer_id: int = Field(foreign_key="influencer.id", ondelete="CASCADE")
-    type: PayoutType
-    cpa_amount: int | None = None
-    fixed_amount: int | None = None
-
-    offer: Offer = Relationship(back_populates="custom_payouts")
-    influencer: Influencer = Relationship(back_populates="custom_payouts")
-    country_overrides: list[CustomCountryOverride] = Relationship(
-        back_populates="custom_payout", cascade_delete=True
-    )
+    @property
+    def payout(self) -> "Payout | None":
+        return next((p for p in self.payouts if p.influencer_id is None), None)

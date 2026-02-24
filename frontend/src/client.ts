@@ -66,38 +66,6 @@ export interface CountryOverrideResp {
   id: number;
 }
 
-/** CustomPayoutCreate */
-export interface CustomPayoutCreate {
-  type: PayoutType;
-  /** Cpa Amount */
-  cpa_amount?: number | null;
-  /** Fixed Amount */
-  fixed_amount?: number | null;
-  /**
-   * Country Overrides
-   * @default []
-   */
-  country_overrides?: CountryOverrideCreate[];
-}
-
-/** CustomPayoutResp */
-export interface CustomPayoutResp {
-  type: PayoutType;
-  /** Cpa Amount */
-  cpa_amount?: number | null;
-  /** Fixed Amount */
-  fixed_amount?: number | null;
-  /** Id */
-  id: number;
-  /** Influencer Id */
-  influencer_id: number;
-  /**
-   * Country Overrides
-   * @default []
-   */
-  country_overrides?: CountryOverrideResp[];
-}
-
 /** HTTPValidationError */
 export interface HTTPValidationError {
   /** Detail */
@@ -169,6 +137,8 @@ export interface PayoutCreate {
   cpa_amount?: number | null;
   /** Fixed Amount */
   fixed_amount?: number | null;
+  /** Influencer Id */
+  influencer_id?: number | null;
   /**
    * Country Overrides
    * @default []
@@ -185,6 +155,8 @@ export interface PayoutResp {
   fixed_amount?: number | null;
   /** Id */
   id: number;
+  /** Influencer Id */
+  influencer_id?: number | null;
   /**
    * Country Overrides
    * @default []
@@ -576,14 +548,14 @@ export class Api<
     /**
      * No description
      *
-     * @tags Custom Payouts
-     * @name GetCustomPayouts
-     * @summary Get Custom Payouts
-     * @request GET:/api/offers/{offer_id}/custom-payouts
+     * @tags Payouts
+     * @name GetPayouts
+     * @summary Get Payouts
+     * @request GET:/api/offers/{offer_id}/payouts
      */
-    getCustomPayouts: (offerId: number, params: RequestParams = {}) =>
-      this.request<CustomPayoutResp[], HTTPValidationError>({
-        path: `/api/offers/${offerId}/custom-payouts`,
+    getPayouts: (offerId: number, params: RequestParams = {}) =>
+      this.request<PayoutResp[], HTTPValidationError>({
+        path: `/api/offers/${offerId}/payouts`,
         method: "GET",
         format: "json",
         ...params,
@@ -592,24 +564,19 @@ export class Api<
     /**
      * No description
      *
-     * @tags Custom Payouts
-     * @name CreateCustomPayout
-     * @summary Create Custom Payout
-     * @request POST:/api/offers/{offer_id}/custom-payouts
+     * @tags Payouts
+     * @name CreatePayout
+     * @summary Create Payout
+     * @request POST:/api/offers/{offer_id}/payouts
      */
-    createCustomPayout: (
+    createPayout: (
       offerId: number,
-      query: {
-        /** Influencer Id */
-        influencer_id: number;
-      },
-      data: CustomPayoutCreate,
+      data: PayoutCreate,
       params: RequestParams = {},
     ) =>
-      this.request<CustomPayoutResp, HTTPValidationError>({
-        path: `/api/offers/${offerId}/custom-payouts`,
+      this.request<PayoutResp, HTTPValidationError>({
+        path: `/api/offers/${offerId}/payouts`,
         method: "POST",
-        query: query,
         body: data,
         type: ContentType.Json,
         format: "json",
@@ -619,39 +586,19 @@ export class Api<
     /**
      * No description
      *
-     * @tags Custom Payouts
-     * @name GetCustomPayout
-     * @summary Get Custom Payout
-     * @request GET:/api/offers/{offer_id}/custom-payouts/{influencer_id}
+     * @tags Payouts
+     * @name UpdatePayout
+     * @summary Update Payout
+     * @request PUT:/api/offers/{offer_id}/payouts/{payout_id}
      */
-    getCustomPayout: (
-      influencerId: number,
+    updatePayout: (
       offerId: number,
+      payoutId: number,
+      data: PayoutCreate,
       params: RequestParams = {},
     ) =>
-      this.request<CustomPayoutResp, HTTPValidationError>({
-        path: `/api/offers/${offerId}/custom-payouts/${influencerId}`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Custom Payouts
-     * @name UpdateCustomPayout
-     * @summary Update Custom Payout
-     * @request PUT:/api/offers/{offer_id}/custom-payouts/{influencer_id}
-     */
-    updateCustomPayout: (
-      influencerId: number,
-      offerId: number,
-      data: CustomPayoutCreate,
-      params: RequestParams = {},
-    ) =>
-      this.request<CustomPayoutResp, HTTPValidationError>({
-        path: `/api/offers/${offerId}/custom-payouts/${influencerId}`,
+      this.request<PayoutResp, HTTPValidationError>({
+        path: `/api/offers/${offerId}/payouts/${payoutId}`,
         method: "PUT",
         body: data,
         type: ContentType.Json,
@@ -662,18 +609,18 @@ export class Api<
     /**
      * No description
      *
-     * @tags Custom Payouts
-     * @name DeleteCustomPayout
-     * @summary Delete Custom Payout
-     * @request DELETE:/api/offers/{offer_id}/custom-payouts/{influencer_id}
+     * @tags Payouts
+     * @name DeletePayout
+     * @summary Delete Payout
+     * @request DELETE:/api/offers/{offer_id}/payouts/{payout_id}
      */
-    deleteCustomPayout: (
-      influencerId: number,
+    deletePayout: (
       offerId: number,
+      payoutId: number,
       params: RequestParams = {},
     ) =>
       this.request<void, HTTPValidationError>({
-        path: `/api/offers/${offerId}/custom-payouts/${influencerId}`,
+        path: `/api/offers/${offerId}/payouts/${payoutId}`,
         method: "DELETE",
         ...params,
       }),

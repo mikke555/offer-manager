@@ -16,11 +16,11 @@ offer_create_examples = {
         },
     },
     "example2": {
-        "summary": "Fixed payout e-commerce promotion",
+        "summary": "FIXED streaming service",
         "value": {
-            "title": "UrbanStyle Fashion Store",
-            "description": "Promote seasonal fashion collections and exclusive discounts",
-            "categories": ["Fashion"],
+            "title": "StreamVibe Premium Trial",
+            "description": "Promote free trial sign-ups for a streaming platform",
+            "categories": ["Tech"],
             "payout": {
                 "type": "fixed",
                 "fixed_amount": 40,
@@ -29,10 +29,10 @@ offer_create_examples = {
         },
     },
     "example3": {
-        "summary": "CPA mobile gaming install offer",
+        "summary": "CPA mobile puzzle game",
         "value": {
-            "title": "Dragon Realm Mobile RPG",
-            "description": "Install and complete tutorial in a fantasy mobile RPG",
+            "title": "Puzzle Quest Legends",
+            "description": "Install and reach level 10 in a casual puzzle game",
             "categories": ["Gaming"],
             "payout": {
                 "type": "cpa",
@@ -45,10 +45,10 @@ offer_create_examples = {
         },
     },
     "example4": {
-        "summary": "CPA+Fixed fitness subscription offer",
+        "summary": "CPA+FIXED fitness subscription offer",
         "value": {
-            "title": "FitLife Nutrition & Fitness App",
-            "description": "Sign up and start a premium fitness and nutrition plan",
+            "title": "GymPro Coaching App",
+            "description": "Sign up and start a premium fitness coaching plan",
             "categories": ["Health", "Nutrition"],
             "payout": {
                 "type": "cpa_fixed",
@@ -61,10 +61,10 @@ offer_create_examples = {
         },
     },
     "example5": {
-        "summary": "Fixed SaaS product promotion",
+        "summary": "FIXED SaaS product promotion",
         "value": {
-            "title": "AI Resume Builder Pro",
-            "description": "Promote an AI-powered resume and cover letter builder",
+            "title": "CloudDocs Editor Pro",
+            "description": "Promote a cloud-based collaborative document editor",
             "categories": ["Tech", "Finance"],
             "payout": {
                 "type": "fixed",
@@ -76,7 +76,7 @@ offer_create_examples = {
     "example6": {
         "summary": "CPA budgeting app sign-up",
         "value": {
-            "title": "Smart Budget Tracker",
+            "title": "PennyWise Expense App",
             "description": "Register and connect a bank account to track expenses",
             "categories": ["Finance", "Tech"],
             "payout": {
@@ -145,18 +145,6 @@ offer_patch_examples = {
                     {"country_code": "NO", "cpa_amount": 35},
                 ],
             },
-        },
-    },
-}
-
-custom_payout_put_examples = {
-    "example1": {
-        "summary": "Change custom payout to CPA + Fixed with country overrides",
-        "value": {
-            "type": "cpa_fixed",
-            "cpa_amount": 10,
-            "fixed_amount": 100,
-            "country_overrides": [{"country_code": "DE", "cpa_amount": 30}],
         },
     },
 }
