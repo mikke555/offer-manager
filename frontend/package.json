@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-client": "npx swagger-typescript-api generate --path http://127.0.0.1:8000/openapi.json --output src --name client.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
