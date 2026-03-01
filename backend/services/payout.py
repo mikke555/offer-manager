@@ -72,7 +72,7 @@ class PayoutService(BaseService):
                 Payout.influencer_id == payout.influencer_id,
             )
         ).first():
-            raise PayoutAlreadyExistsException(offer_id, payout.influencer_id)
+            raise PayoutAlreadyExistsException(offer_id=offer_id)
 
         db_payout = self._create(offer_id, payout, payout.influencer_id)
         self.session.commit()
