@@ -31,7 +31,7 @@ function App() {
         setData(offersResp.data);
 
         if (influencerId) {
-          const influencerResp = await api.api.getInfluencer(9999);
+          const influencerResp = await api.api.getInfluencer(influencerId);
           setInfluencerName(influencerResp.data.name);
         }
         setLoading(false);
