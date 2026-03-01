@@ -4,8 +4,8 @@ from core.exceptions import OfferNotFoundException
 from database.database import engine
 from database.models import Offer
 from fastapi import Depends
-from services.custom_payout import CustomPayoutService
 from services.offer import OfferService
+from services.payout import PayoutService
 from sqlmodel import Session
 
 
@@ -34,10 +34,8 @@ def get_offer_service(session: SessionDep) -> OfferService:
 OfferServiceDep = Annotated[OfferService, Depends(get_offer_service)]
 
 
-def get_custom_payout_service(session: SessionDep) -> CustomPayoutService:
-    return CustomPayoutService(session)
+def get_payout_service(session: SessionDep) -> PayoutService:
+    return PayoutService(session)
 
 
-CustomPayoutServiceDep = Annotated[
-    CustomPayoutService, Depends(get_custom_payout_service)
-]
+PayoutServiceDep = Annotated[PayoutService, Depends(get_payout_service)]

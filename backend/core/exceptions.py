@@ -1,39 +1,40 @@
 from fastapi import HTTPException, status
 
 
-class NotFoundException(HTTPException):
-    def __init__(self, id: int | None = None, name: str | None = "Resource"):
-        self.id = id
-        self.name = name
+class AppException(HTTPException):
+    status_code: int = status.HTTP_400_BAD_REQUEST
+    detail: str = "An error occurred"
 
-        detail = (
-            f"{self.name} with id {self.id} not found"
-            if id is not None
-            else f"{self.name} not found"
-        )
-        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=detail)
+    def __init__(self, **format_args):
+        detail = self.detail.format(**format_args) if format_args else self.detail
+        super().__init__(status_code=self.status_code, detail=detail)
+
+
+class NotFoundException(AppException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "{name} with id {id} not found"
 
 
 class OfferNotFoundException(NotFoundException):
-    def __init__(self, id: int | None = None):
-        super().__init__(id=id, name="Offer")
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Offer with id {id} not found"
 
 
 class InfluencerNotFoundException(NotFoundException):
-    def __init__(self, id: int | None = None):
-        super().__init__(id=id, name="Influencer")
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Influencer with id {id} not found"
 
 
-class InvalidCategoryException(HTTPException):
-    def __init__(self, detail: str = "This category is not allowed"):
-        super().__init__(
-            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=detail
-        )
+class PayoutAlreadyExistsException(AppException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Payout for offer {offer_id} and given influencer already exists"
 
 
-class CustomPayoutAlreadyExistsException(HTTPException):
-    def __init__(self, offer_id: int, influencer_id: int):
-        super().__init__(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"Custom payout for offer {offer_id} and influencer {influencer_id} already exists",
-        )
+class InvalidCategoryException(AppException):
+    status_code = status.HTTP_422_UNPROCESSABLE_CONTENT
+    detail = "This category is not allowed"
+
+
+class DefaultPayoutDeletionException(AppException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Cannot delete the default payout"
