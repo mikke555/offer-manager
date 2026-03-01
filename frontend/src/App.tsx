@@ -31,7 +31,7 @@ function App() {
         setData(offersResp.data);
 
         if (influencerId) {
-          const influencerResp = await api.api.getInfluencer(influencerId);
+          const influencerResp = await api.api.getInfluencer(9999);
           setInfluencerName(influencerResp.data.name);
         }
         setLoading(false);
@@ -53,12 +53,14 @@ function App() {
         error instanceof Response && error.status === 404 && influencerId
           ? `Influencer with ID ${influencerId} not found.`
           : "Error loading offers.";
-      return <p className="text-slate-600 text-lg">{msg}</p>;
+      return <p className="text-slate-600 text-lg text-center">{msg}</p>;
     }
     if (loading)
-      return <p className="text-slate-600 text-lg">Loading offers...</p>;
+      return (
+        <p className="text-slate-600 text-lg text-center">Loading offers...</p>
+      );
     if (offers?.length) return <OffersList offers={offers} />;
-    return <p className="text-slate-600 text-lg">Nothing found</p>;
+    return <p className="text-slate-600 text-lg text-center">Nothing found</p>;
   };
 
   return (
