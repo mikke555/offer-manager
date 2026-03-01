@@ -1,5 +1,6 @@
 from api.schemas.payout import PayoutCreate, PayoutResp
 from core.exceptions import (
+    DefaultPayoutDeletionException,
     InfluencerNotFoundException,
     NotFoundException,
     PayoutAlreadyExistsException,
@@ -95,6 +96,9 @@ class PayoutService(BaseService):
         db_payout = self.session.get(Payout, payout_id)
         if not db_payout or db_payout.offer_id != offer_id:
             raise NotFoundException(id=payout_id, name="Payout")
+
+        if db_payout.influencer_id is None:
+            raise DefaultPayoutDeletionException()
 
         self.session.delete(db_payout)
         self.session.commit()

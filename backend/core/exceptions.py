@@ -38,3 +38,11 @@ class InvalidCategoryException(HTTPException):
         super().__init__(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=detail
         )
+
+
+class DefaultPayoutDeletionException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete the default payout",
+        )
